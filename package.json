@@ -1,0 +1,17 @@
+{
+  "name": "diamond-proxy",
+  "version": "1.0.0",
+  "description": "Proxy server communicating HTTP and WebSockets traffic to a target server via multiple ports.",
+  "main": "main.js",
+  "dependencies": {
+    "request": "^2.53.0",
+    "websocket": "^1.0.18",
+    "tunnel": "^0.0.3"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Krisztian Balazs Szaniszlo",
+  "license": "MIT"
+}
