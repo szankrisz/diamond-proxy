@@ -92,14 +92,16 @@ function setupProxy(port) {
 
         // Collect and dump headers.
         var headers = {};
-        for (var i = 0; i < request.rawHeaders.length; i += 2) {
-            var key = request.rawHeaders[i];
-            var value = request.rawHeaders[i + 1];
-            var skipped = key.toLowerCase() == 'host';
-            if (!skipped)
-                headers[key] = value;
+        if (request.rawHeaders) {
+            for (var i = 0; i < request.rawHeaders.length; i += 2) {
+                var key = request.rawHeaders[i];
+                var value = request.rawHeaders[i + 1];
+                var skipped = key.toLowerCase() == 'host';
+                if (!skipped)
+                    headers[key] = value;
 
-            console.log('\t' + (skipped ? '(skipped) ' : '') + key + ': ' + value);
+                console.log('\t' + (skipped ? '(skipped) ' : '') + key + ': ' + value);
+            }
         }
 
         // Proxy everything to the target server.
@@ -111,7 +113,7 @@ function setupProxy(port) {
             method: request.method,
             headers: headers,
             agent: tunnelingAgent,
-            rejectUnauthorized : false
+            rejectUnauthorized: false
         }, function(targetResponse) {
             console.log('---> Sending back response\n');
             console.log('\t' + targetResponse.statusCode);
@@ -157,15 +159,17 @@ function setupProxy(port) {
 
         // Collect and dump headers.
         var headers = {};
-        for (var i = 0; i < request.httpRequest.rawHeaders.length; i += 2) {
-            var key = request.httpRequest.rawHeaders[i];
-            var value = request.httpRequest.rawHeaders[i + 1];
-            var lKey = key.toLowerCase();
-            var skipped = lKey == 'host' || lKey == 'upgrade' || lKey == 'connection' || lKey.indexOf('sec-websocket-') === 0;
-            if (!skipped)
-                headers[lKey] = value;
+        if (request.httpRequest && request.httpRequest.rawHeaders) {
+            for (var i = 0; i < request.httpRequest.rawHeaders.length; i += 2) {
+                var key = request.httpRequest.rawHeaders[i];
+                var value = request.httpRequest.rawHeaders[i + 1];
+                var lKey = key.toLowerCase();
+                var skipped = lKey == 'host' || lKey == 'upgrade' || lKey == 'connection' || lKey.indexOf('sec-websocket-') === 0;
+                if (!skipped)
+                    headers[lKey] = value;
 
-            console.log('\t' + (skipped ? '(skipped) ' : '') + key + ': ' + value);
+                console.log('\t' + (skipped ? '(skipped) ' : '') + key + ': ' + value);
+            }
         }
 
         // Create the client and configure it.
@@ -259,7 +263,7 @@ function setupProxy(port) {
         });
 
         // Establish the connection.
-        var wsUrl = param_targetWsUrl.href +'/' + request.resourceURL.path;
+        var wsUrl = param_targetWsUrl.href + '/' + request.resourceURL.path;
         console.log('---> Connecting with WebSockets to URL \'' + wsUrl + '\' using protocols: ' + request.requestedProtocols);
 
         wsClient.connect(wsUrl, request.requestedProtocols, request.origin, headers, {
